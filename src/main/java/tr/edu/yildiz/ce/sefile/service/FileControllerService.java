@@ -5,6 +5,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,6 +42,11 @@ public class FileControllerService {
         fileRepositoryService.saveFile(file);
 
         return new FileInsertControllerResponse(ResponseHeader.success(), file.getId());
+    }
+
+    public Resource fetchFile(String id) {
+        var file = fileRepositoryService.findFileWithId(id);
+        return new ByteArrayResource(file.getContent());
     }
 
 }
