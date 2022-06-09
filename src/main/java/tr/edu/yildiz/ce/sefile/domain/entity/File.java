@@ -24,8 +24,6 @@ public class File implements Serializable {
     private String id;
     @Column
     private String name;
-    @Column
-    private String path;
     @Lob
     @Basic(fetch = FetchType.LAZY)
     private byte[] content;
@@ -33,6 +31,10 @@ public class File implements Serializable {
     private String hashedValue;
     @Column
     private String tenantId;
+    @Column
+    private String contentType;
+    @Column
+    private long length;
     @Enumerated(EnumType.STRING)
     private AccessType accessType;
     @OneToMany
@@ -52,14 +54,6 @@ public class File implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public byte[] getContent() {
@@ -84,6 +78,22 @@ public class File implements Serializable {
 
     public void setTenantId(String tenantId) {
         this.tenantId = tenantId;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public long getLength() {
+        return length;
+    }
+
+    public void setLength(long length) {
+        this.length = length;
     }
 
     public AccessType getAccessType() {
