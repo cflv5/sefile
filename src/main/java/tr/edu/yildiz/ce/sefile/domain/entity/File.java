@@ -15,6 +15,9 @@ import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.http.HttpStatus;
+
+import tr.edu.yildiz.ce.se.base.exception.SeBaseException;
 
 @Entity
 public class File implements Serializable {
@@ -110,6 +113,27 @@ public class File implements Serializable {
 
     public void setPolicies(List<AccessPolicy> policies) {
         this.policies = policies;
+    }
+
+    public void hasTenantRightToAccess(String tenantId) {
+        if (accessType == AccessType.PUBLIC) {
+            return;
+        }
+
+        if (this.tenantId.equals(tenantId)) {
+            return;
+        }
+
+        AccessPolicy policy = this.policies
+                .stream()
+                .filter(p -> p.getTenantId().equals(tenantId))
+                .findFirst()
+                .orElseThrow(() -> new SeBaseException("Unauthorized", HttpStatus.UNAUTHORIZED));
+
+        if (policy.getAction() == AccessPolicyAction.BLOCK) {
+            throw new SeBaseException("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
+
     }
 
 }
