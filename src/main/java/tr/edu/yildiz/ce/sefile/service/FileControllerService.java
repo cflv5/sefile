@@ -44,7 +44,7 @@ public class FileControllerService {
         return new FileInsertControllerResponse(ResponseHeader.success(), file.getId());
     }
 
-    public Resource fetchFile(String id) {
+    public Resource fetchFileContent(String id) {
         var file = fileRepositoryService.findFileWithId(id);
         return new ByteArrayResource(file.getContent());
     }
