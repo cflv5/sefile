@@ -1,5 +1,6 @@
 package tr.edu.yildiz.ce.sefile.domain.dto;
 
+import tr.edu.yildiz.ce.sefile.domain.entity.AccessType;
 import tr.edu.yildiz.ce.sefile.domain.entity.File;
 
 public class FileDto {
@@ -7,6 +8,7 @@ public class FileDto {
     private String tenantId;
     private String fileId;
     private String contentType;
+    private AccessType accessType;
 
     public FileDto() {
         super();
@@ -18,6 +20,7 @@ public class FileDto {
         dto.tenantId = file.getTenantId();
         dto.fileId = file.getId();
         dto.contentType = file.getContentType();
+        dto.accessType = file.getAccessType();
         return dto;
     }
 
@@ -71,6 +74,14 @@ public class FileDto {
     public FileDto contentType(String contentType) {
         this.contentType = contentType;
         return this;
+    }
+
+    public AccessType getAccessType() {
+        return accessType;
+    }
+
+    public void setAccessType(AccessType accessType) {
+        this.accessType = accessType;
     }
 
 }
