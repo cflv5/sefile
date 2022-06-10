@@ -23,7 +23,7 @@ import tr.edu.yildiz.ce.sefile.domain.response.FileInsertControllerResponse;
 import tr.edu.yildiz.ce.sefile.service.FileControllerService;
 
 @RestController
-@RequestMapping("/v1/api/file")
+@RequestMapping("/v1/api/files")
 public class FileController {
     private final FileControllerService fileControllerService;
 
