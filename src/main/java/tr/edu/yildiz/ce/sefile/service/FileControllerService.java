@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import tr.edu.yildiz.ce.se.base.context.TenantContext;
 import tr.edu.yildiz.ce.se.base.domain.ResponseHeader;
+import tr.edu.yildiz.ce.sefile.domain.dto.FileDto;
 import tr.edu.yildiz.ce.sefile.domain.entity.AccessType;
 import tr.edu.yildiz.ce.sefile.domain.entity.File;
 import tr.edu.yildiz.ce.sefile.domain.request.FileInsertControllerRequest;
@@ -47,6 +48,10 @@ public class FileControllerService {
     public Resource fetchFileContent(String id) {
         var file = fileRepositoryService.findFileWithId(id);
         return new ByteArrayResource(file.getContent());
+    }
+
+    public FileDto fetchFile(String id) {
+        return FileDto.of(fileRepositoryService.findFileWithId(id));
     }
 
 }
