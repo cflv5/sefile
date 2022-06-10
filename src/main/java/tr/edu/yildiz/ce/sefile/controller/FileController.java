@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import tr.edu.yildiz.ce.sefile.domain.dto.FileDto;
 import tr.edu.yildiz.ce.sefile.domain.request.FileInsertControllerRequest;
 import tr.edu.yildiz.ce.sefile.domain.response.FileInsertControllerResponse;
 import tr.edu.yildiz.ce.sefile.service.FileControllerService;
@@ -40,12 +41,19 @@ public class FileController {
 
     @GetMapping(value = "/content/{id}")
     public ResponseEntity<Resource> fetchFileContent(@PathVariable(value = "id") String id) throws IOException {
-        var resource = fileControllerService.fetchFile(id);
+        var resource = fileControllerService.fetchFileContent(id);
         return ResponseEntity
                 .ok()
                 .contentLength(resource.contentLength())
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<FileDto> fetchFile(@PathVariable(value = "id") String id) {
+        return ResponseEntity
+                .ok()
+                .body(fileControllerService.fetchFile(id));
     }
 
 }
