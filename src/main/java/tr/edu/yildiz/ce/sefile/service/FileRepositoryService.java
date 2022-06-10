@@ -20,14 +20,26 @@ public class FileRepositoryService {
         return fileRepository.save(file);
     }
 
-    public File findFileWithId(String id) {
-        var optFile = fileRepository.findById(id);
-        
-        var file = optFile.orElseThrow(() -> new SeBaseException("File Not Found", HttpStatus.NOT_FOUND));
+    public File findFileWithIdToAccess(String id) {
+        var file = findFile(id);
 
         file.hasTenantRightToAccess(TenantContext.getCurrentTenant().getTenantId());
 
         return file;
+    }
+
+    public File findFileWithIdToEdit(String id) {
+        var file = findFile(id);
+
+        file.hasTenantRightToEdit(TenantContext.getCurrentTenant().getTenantId());
+
+        return file;
+    }
+
+    private File findFile(String id) {
+        var optFile = fileRepository.findById(id);
+
+        return optFile.orElseThrow(() -> new SeBaseException("File Not Found", HttpStatus.NOT_FOUND));
     }
 
 }

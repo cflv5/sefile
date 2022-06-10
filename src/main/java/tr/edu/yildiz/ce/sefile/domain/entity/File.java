@@ -18,6 +18,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.http.HttpStatus;
 
 import tr.edu.yildiz.ce.se.base.exception.SeBaseException;
+import tr.edu.yildiz.ce.sefile.constants.FileConstants;
 
 @Entity
 public class File implements Serializable {
@@ -124,16 +125,25 @@ public class File implements Serializable {
             return;
         }
 
+        if (this.policies.stream().filter(p -> p.getTenantId().equals(tenantId)).findFirst().isEmpty()) {
+            throw new SeBaseException(FileConstants.UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    public void hasTenantRightToEdit(String tenantId) {
+        if (this.tenantId.equals(tenantId)) {
+            return;
+        }
+
         AccessPolicy policy = this.policies
                 .stream()
                 .filter(p -> p.getTenantId().equals(tenantId))
                 .findFirst()
-                .orElseThrow(() -> new SeBaseException("Unauthorized", HttpStatus.UNAUTHORIZED));
+                .orElseThrow(() -> new SeBaseException(FileConstants.UNAUTHORIZED, HttpStatus.UNAUTHORIZED));
 
-        if (policy.getAction() == AccessPolicyAction.BLOCK) {
-            throw new SeBaseException("Unauthorized", HttpStatus.UNAUTHORIZED);
+        if (policy.getAction() != AccessPolicyAction.EDIT) {
+            throw new SeBaseException(FileConstants.UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
         }
-
     }
 
 }

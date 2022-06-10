@@ -46,12 +46,12 @@ public class FileControllerService {
     }
 
     public Resource fetchFileContent(String id) {
-        var file = fileRepositoryService.findFileWithId(id);
+        var file = fileRepositoryService.findFileWithIdToAccess(id);
         return new ByteArrayResource(file.getContent());
     }
 
     public FileDto fetchFile(String id) {
-        return FileDto.of(fileRepositoryService.findFileWithId(id));
+        return FileDto.of(fileRepositoryService.findFileWithIdToAccess(id));
     }
 
 }
