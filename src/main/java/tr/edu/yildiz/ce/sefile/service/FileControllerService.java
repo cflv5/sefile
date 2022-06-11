@@ -7,11 +7,13 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import tr.edu.yildiz.ce.se.base.context.TenantContext;
 import tr.edu.yildiz.ce.se.base.domain.ResponseHeader;
+import tr.edu.yildiz.ce.se.base.exception.SeBaseException;
 import tr.edu.yildiz.ce.sefile.domain.dto.FileDto;
 import tr.edu.yildiz.ce.sefile.domain.entity.AccessType;
 import tr.edu.yildiz.ce.sefile.domain.entity.File;
@@ -30,11 +32,17 @@ public class FileControllerService {
 
     public FileInsertControllerResponse insertFile(FileInsertControllerRequest request, MultipartFile multipartFile)
             throws NoSuchAlgorithmException, IOException {
+
+        var hashValue = HashUtil.createFileSha256Hash(multipartFile.getInputStream());
+        if (!hashValue.equals(request.getHashValue())) {
+            throw new SeBaseException("Integrity of the file could not be verified", HttpStatus.OK);
+        }
+
         var file = new File();
 
         file.setAccessType(Objects.isNull(request.getAccessType()) ? AccessType.PRIVATE : AccessType.PUBLIC);
         file.setContent(multipartFile.getBytes());
-        file.setHashedValue(HashUtil.createFileSha256Hash(multipartFile.getInputStream()));
+        file.setHashedValue(hashValue);
         file.setName(multipartFile.getOriginalFilename());
         file.setContentType(multipartFile.getContentType());
         file.setLength(multipartFile.getSize());
