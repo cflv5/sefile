@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import tr.edu.yildiz.ce.se.base.domain.OnlyHeaderControllerResponse;
 import tr.edu.yildiz.ce.sefile.domain.request.InsertFileRightControllerRequest;
 import tr.edu.yildiz.ce.sefile.domain.response.FetchPoliciesControllerResponse;
-import tr.edu.yildiz.ce.sefile.domain.response.InsertFileRightControllerResponse;
 import tr.edu.yildiz.ce.sefile.service.RightControllerService;
 
 @RestController
@@ -34,7 +33,7 @@ public class RightController {
     }
 
     @PostMapping(value = "/file/{id}")
-    public ResponseEntity<InsertFileRightControllerResponse> addFileRight(@PathVariable(value = "id") String fileId,
+    public ResponseEntity<OnlyHeaderControllerResponse> addFileRight(@PathVariable(value = "id") String fileId,
             @RequestBody @Valid InsertFileRightControllerRequest request) {
         return ResponseEntity.ok().body(rightControllerService.addRight(request, fileId));
     }

@@ -15,7 +15,6 @@ import tr.edu.yildiz.ce.se.base.exception.SeBaseException;
 import tr.edu.yildiz.ce.sefile.domain.entity.AccessPolicy;
 import tr.edu.yildiz.ce.sefile.domain.request.InsertFileRightControllerRequest;
 import tr.edu.yildiz.ce.sefile.domain.response.FetchPoliciesControllerResponse;
-import tr.edu.yildiz.ce.sefile.domain.response.InsertFileRightControllerResponse;
 
 @Service
 public class RightControllerService {
@@ -34,7 +33,7 @@ public class RightControllerService {
                 fileRepositoryService.findFileWithIdToEdit(fileId).getPolicies());
     }
 
-    public InsertFileRightControllerResponse addRight(InsertFileRightControllerRequest request, String fileId) {
+    public OnlyHeaderControllerResponse addRight(InsertFileRightControllerRequest request, String fileId) {
         var tenantId = TenantContext.getCurrentTenant().getTenantId();
 
         if (tenantId.equals(request.getTenantId())) {
@@ -55,7 +54,7 @@ public class RightControllerService {
             fileRepositoryService.saveFile(file);
         }
 
-        return new InsertFileRightControllerResponse(ResponseHeader.success());
+        return OnlyHeaderControllerResponse.success();
     }
 
     private Optional<AccessPolicy> checkIfTenantAlreadyHasAccessPolicy(List<AccessPolicy> policies, String tenantId) {
