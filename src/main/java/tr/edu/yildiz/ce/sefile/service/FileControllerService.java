@@ -55,7 +55,13 @@ public class FileControllerService {
 
     public Resource fetchFileContent(String id) {
         var file = fileRepositoryService.findFileWithIdToAccess(id);
-        return new ByteArrayResource(file.getContent());
+        var fileName = file.getName();
+        return new ByteArrayResource(file.getContent()) {
+            @Override
+            public String getFilename() {
+                return fileName;
+            }
+        };
     }
 
     public FileDto fetchFile(String id) {
