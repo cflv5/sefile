@@ -12,7 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
+@JsonIgnoreProperties(value = { "resource" })
 public class AccessPolicy implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -59,4 +63,45 @@ public class AccessPolicy implements Serializable {
         this.action = action;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    @JsonProperty("fileId")
+    public String jsonFileId() {
+        return resource.getId();
+    }
+
+    public static final class Builder {
+        private File resource;
+        private String tenantId;
+        private AccessPolicyAction action;
+
+        private Builder() {
+            super();
+        }
+
+        public Builder resource(File resource) {
+            this.resource = resource;
+            return this;
+        }
+
+        public Builder tenantId(String tenantId) {
+            this.tenantId = tenantId;
+            return this;
+        }
+
+        public Builder action(AccessPolicyAction action) {
+            this.action = action;
+            return this;
+        }
+
+        public AccessPolicy build() {
+            var policy = new AccessPolicy();
+            policy.setResource(resource);
+            policy.setTenantId(tenantId);
+            policy.setAction(action);
+            return policy;
+        }
+    }
 }
