@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import tr.edu.yildiz.ce.se.base.context.TenantContext;
+import tr.edu.yildiz.ce.se.base.domain.HeaderMessage;
+import tr.edu.yildiz.ce.se.base.domain.OnlyHeaderControllerResponse;
 import tr.edu.yildiz.ce.se.base.domain.ResponseHeader;
 import tr.edu.yildiz.ce.se.base.exception.SeBaseException;
 import tr.edu.yildiz.ce.sefile.domain.entity.AccessPolicy;
@@ -58,6 +60,21 @@ public class RightControllerService {
 
     private Optional<AccessPolicy> checkIfTenantAlreadyHasAccessPolicy(List<AccessPolicy> policies, String tenantId) {
         return policies.stream().filter(p -> tenantId.equals(p.getTenantId())).findFirst();
+    }
+
+    public OnlyHeaderControllerResponse deleteRight(int rightId, String fileId) {
+        var file = fileRepositoryService.findFileWithIdToEdit(fileId);
+
+        if (file.getPolicies().removeIf(p -> rightId == p.getId())) {
+            fileRepositoryService.saveFile(file);
+            return OnlyHeaderControllerResponse.success();
+        } else {
+            return OnlyHeaderControllerResponse.failed(HeaderMessage.Builder
+                    .create()
+                    .text("File does not has the access right.")
+                    .build());
+        }
+
     }
 
 }
