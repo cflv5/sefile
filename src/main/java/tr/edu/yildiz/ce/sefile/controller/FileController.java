@@ -7,7 +7,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,12 +39,13 @@ public class FileController {
     }
 
     @GetMapping(value = "/content/{id}")
-    public ResponseEntity<Resource> fetchFileContent(@PathVariable(value = "id") String id) throws IOException {
+    public ResponseEntity<Resource> fetchFileContent(@PathVariable(value = "id") String id) {
         var resource = fileControllerService.fetchFileContent(id);
         return ResponseEntity
                 .ok()
                 .contentLength(resource.contentLength())
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .contentType(resource.getContentType())
+                .header("Content-Disposition", "attachment; filename=" + resource.getFilename())
                 .body(resource);
     }
 
