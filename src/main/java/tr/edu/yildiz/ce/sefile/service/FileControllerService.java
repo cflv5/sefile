@@ -5,9 +5,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +17,7 @@ import tr.edu.yildiz.ce.se.base.exception.SeBaseException;
 import tr.edu.yildiz.ce.sefile.domain.dto.FileDto;
 import tr.edu.yildiz.ce.sefile.domain.entity.AccessType;
 import tr.edu.yildiz.ce.sefile.domain.entity.File;
+import tr.edu.yildiz.ce.sefile.domain.io.FileResource;
 import tr.edu.yildiz.ce.sefile.domain.request.FileInsertControllerRequest;
 import tr.edu.yildiz.ce.sefile.domain.response.FileInsertControllerResponse;
 import tr.edu.yildiz.ce.sefile.utility.HashUtil;
@@ -44,7 +45,8 @@ public class FileControllerService {
         file.setContent(multipartFile.getBytes());
         file.setHashedValue(hashValue);
         file.setName(multipartFile.getOriginalFilename());
-        file.setContentType(multipartFile.getContentType());
+        file.setContentType(MediaTypeFactory.getMediaType(multipartFile.getResource())
+                .orElse(MediaType.TEXT_PLAIN).toString());
         file.setLength(multipartFile.getSize());
         file.setTenantId(TenantContext.getCurrentTenant().getTenantId());
 
@@ -53,15 +55,8 @@ public class FileControllerService {
         return new FileInsertControllerResponse(ResponseHeader.success(), file.getId());
     }
 
-    public Resource fetchFileContent(String id) {
-        var file = fileRepositoryService.findFileWithIdToAccess(id);
-        var fileName = file.getName();
-        return new ByteArrayResource(file.getContent()) {
-            @Override
-            public String getFilename() {
-                return fileName;
-            }
-        };
+    public FileResource fetchFileContent(String id) {
+        return new FileResource(fileRepositoryService.findFileWithIdToAccess(id));
     }
 
     public FileDto fetchFile(String id) {
