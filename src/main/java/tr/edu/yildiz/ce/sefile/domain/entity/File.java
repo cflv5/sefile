@@ -15,6 +15,10 @@ import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.http.HttpStatus;
+
+import tr.edu.yildiz.ce.se.base.exception.SeBaseException;
+import tr.edu.yildiz.ce.sefile.constants.FileConstants;
 
 @Entity
 public class File implements Serializable {
@@ -37,7 +41,7 @@ public class File implements Serializable {
     private long length;
     @Enumerated(EnumType.STRING)
     private AccessType accessType;
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     private List<AccessPolicy> policies;
 
     public String getId() {
@@ -110,6 +114,36 @@ public class File implements Serializable {
 
     public void setPolicies(List<AccessPolicy> policies) {
         this.policies = policies;
+    }
+
+    public void hasTenantRightToAccess(String tenantId) {
+        if (accessType == AccessType.PUBLIC) {
+            return;
+        }
+
+        if (this.tenantId.equals(tenantId)) {
+            return;
+        }
+
+        if (this.policies.stream().filter(p -> p.getTenantId().equals(tenantId)).findFirst().isEmpty()) {
+            throw new SeBaseException(FileConstants.UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    public void hasTenantRightToEdit(String tenantId) {
+        if (this.tenantId.equals(tenantId)) {
+            return;
+        }
+
+        AccessPolicy policy = this.policies
+                .stream()
+                .filter(p -> p.getTenantId().equals(tenantId))
+                .findFirst()
+                .orElseThrow(() -> new SeBaseException(FileConstants.UNAUTHORIZED, HttpStatus.UNAUTHORIZED));
+
+        if (policy.getAction() != AccessPolicyAction.EDIT) {
+            throw new SeBaseException(FileConstants.UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
+        }
     }
 
 }
