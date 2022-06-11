@@ -21,7 +21,7 @@ public class RightController {
     }
 
     @GetMapping(value = "/file/{id}")
-    public ResponseEntity<FetchPoliciesControllerResponse> getMethodName(@PathVariable(value = "id") String fileId) {
+    public ResponseEntity<FetchPoliciesControllerResponse> fetchFileRight(@PathVariable(value = "id") String fileId) {
         return ResponseEntity.ok().body(rightControllerService.fetchRights(fileId));
     }
 
