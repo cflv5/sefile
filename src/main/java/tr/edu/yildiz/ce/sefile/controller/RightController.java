@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tr.edu.yildiz.ce.se.base.domain.OnlyHeaderControllerResponse;
 import tr.edu.yildiz.ce.sefile.domain.request.InsertFileRightControllerRequest;
 import tr.edu.yildiz.ce.sefile.domain.response.FetchPoliciesControllerResponse;
 import tr.edu.yildiz.ce.sefile.domain.response.InsertFileRightControllerResponse;
@@ -35,6 +37,13 @@ public class RightController {
     public ResponseEntity<InsertFileRightControllerResponse> addFileRight(@PathVariable(value = "id") String fileId,
             @RequestBody @Valid InsertFileRightControllerRequest request) {
         return ResponseEntity.ok().body(rightControllerService.addRight(request, fileId));
+    }
+
+    @DeleteMapping(value = "{rightId}/file/{fileId}")
+    public ResponseEntity<OnlyHeaderControllerResponse> deleteFileRight(
+            @PathVariable(value = "fileId") String fileId,
+            @PathVariable(value = "rightId") int rightId) {
+        return ResponseEntity.ok().body(rightControllerService.deleteRight(rightId, fileId));
     }
 
 }
