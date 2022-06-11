@@ -41,7 +41,7 @@ public class File implements Serializable {
     private long length;
     @Enumerated(EnumType.STRING)
     private AccessType accessType;
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     private List<AccessPolicy> policies;
 
     public String getId() {
