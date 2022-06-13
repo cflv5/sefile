@@ -5,6 +5,7 @@ import tr.edu.yildiz.ce.sefile.domain.entity.File;
 
 public class FileDto {
     private String name;
+    private String hashValue;
     private String tenantId;
     private String fileId;
     private String contentType;
@@ -17,6 +18,7 @@ public class FileDto {
     public static FileDto of(File file) {
         var dto = new FileDto();
         dto.name = file.getName();
+        dto.hashValue = file.getHashedValue();
         dto.tenantId = file.getTenantId();
         dto.fileId = file.getId();
         dto.contentType = file.getContentType();
@@ -30,6 +32,14 @@ public class FileDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getHashValue() {
+        return hashValue;
+    }
+
+    public void setHashValue(String hashValue) {
+        this.hashValue = hashValue;
     }
 
     public String getTenantId() {

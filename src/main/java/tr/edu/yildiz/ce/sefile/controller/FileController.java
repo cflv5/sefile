@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import tr.edu.yildiz.ce.sefile.domain.dto.FileDto;
 import tr.edu.yildiz.ce.sefile.domain.request.FileInsertControllerRequest;
 import tr.edu.yildiz.ce.sefile.domain.response.FileInsertControllerResponse;
+import tr.edu.yildiz.ce.sefile.domain.response.SimpleFileFetchControllerResponse;
 import tr.edu.yildiz.ce.sefile.service.FileControllerService;
 
 @RestController
@@ -50,7 +50,7 @@ public class FileController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<FileDto> fetchFile(@PathVariable(value = "id") String id) {
+    public ResponseEntity<SimpleFileFetchControllerResponse> fetchFile(@PathVariable(value = "id") String id) {
         return ResponseEntity
                 .ok()
                 .body(fileControllerService.fetchFile(id));

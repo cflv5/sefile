@@ -20,6 +20,7 @@ import tr.edu.yildiz.ce.sefile.domain.entity.File;
 import tr.edu.yildiz.ce.sefile.domain.io.FileResource;
 import tr.edu.yildiz.ce.sefile.domain.request.FileInsertControllerRequest;
 import tr.edu.yildiz.ce.sefile.domain.response.FileInsertControllerResponse;
+import tr.edu.yildiz.ce.sefile.domain.response.SimpleFileFetchControllerResponse;
 import tr.edu.yildiz.ce.sefile.utility.HashUtil;
 
 @Service
@@ -59,8 +60,9 @@ public class FileControllerService {
         return new FileResource(fileRepositoryService.findFileWithIdToAccess(id));
     }
 
-    public FileDto fetchFile(String id) {
-        return FileDto.of(fileRepositoryService.findFileWithIdToAccess(id));
+    public SimpleFileFetchControllerResponse fetchFile(String id) {
+        return new SimpleFileFetchControllerResponse(ResponseHeader.success(),
+                FileDto.of(fileRepositoryService.findFileWithIdToAccess(id)));
     }
 
 }
