@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import tr.edu.yildiz.ce.se.base.context.TenantContext;
 import tr.edu.yildiz.ce.se.base.domain.ResponseHeader;
 import tr.edu.yildiz.ce.se.base.exception.SeBaseException;
+import tr.edu.yildiz.ce.se.base.util.HashUtil;
 import tr.edu.yildiz.ce.sefile.domain.dto.FileDto;
 import tr.edu.yildiz.ce.sefile.domain.entity.AccessType;
 import tr.edu.yildiz.ce.sefile.domain.entity.File;
@@ -21,7 +22,6 @@ import tr.edu.yildiz.ce.sefile.domain.io.FileResource;
 import tr.edu.yildiz.ce.sefile.domain.request.FileInsertControllerRequest;
 import tr.edu.yildiz.ce.sefile.domain.response.FileInsertControllerResponse;
 import tr.edu.yildiz.ce.sefile.domain.response.SimpleFileFetchControllerResponse;
-import tr.edu.yildiz.ce.sefile.utility.HashUtil;
 
 @Service
 public class FileControllerService {
