@@ -1,6 +1,7 @@
 package tr.edu.yildiz.ce.sefile.domain.entity;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -14,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.http.HttpStatus;
 
@@ -43,6 +45,10 @@ public class File implements Serializable {
     private AccessType accessType;
     @OneToMany(fetch = FetchType.LAZY)
     private List<AccessPolicy> policies;
+
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
+    private OffsetDateTime createdAt;
 
     public String getId() {
         return id;
@@ -116,6 +122,14 @@ public class File implements Serializable {
         this.policies = policies;
     }
 
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(OffsetDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public void hasTenantRightToAccess(String tenantId) {
         if (accessType == AccessType.PUBLIC) {
             return;
@@ -145,5 +159,7 @@ public class File implements Serializable {
             throw new SeBaseException(FileConstants.UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
         }
     }
+
+    
 
 }
