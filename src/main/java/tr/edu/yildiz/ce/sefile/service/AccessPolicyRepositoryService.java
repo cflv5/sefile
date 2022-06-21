@@ -9,6 +9,7 @@ import tr.edu.yildiz.ce.se.base.context.TenantContext;
 import tr.edu.yildiz.ce.se.base.exception.SeBaseException;
 import tr.edu.yildiz.ce.sefile.domain.entity.AccessPolicy;
 import tr.edu.yildiz.ce.sefile.domain.entity.AccessPolicyAction;
+import tr.edu.yildiz.ce.sefile.domain.entity.AccessPolicyStatus;
 import tr.edu.yildiz.ce.sefile.domain.entity.File;
 import tr.edu.yildiz.ce.sefile.repository.AccessPolicyRespository;
 
@@ -28,6 +29,7 @@ public class AccessPolicyRepositoryService {
                 .resource(resource)
                 .tenantId(tenantId)
                 .action(action)
+                .status(AccessPolicyStatus.ACTIVE)
                 .build());
     }
 

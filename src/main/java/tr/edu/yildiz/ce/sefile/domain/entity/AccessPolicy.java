@@ -70,6 +70,14 @@ public class AccessPolicy implements Serializable {
         return new Builder();
     }
 
+    public AccessPolicyStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AccessPolicyStatus status) {
+        this.status = status;
+    }
+
     @JsonProperty("fileId")
     public String jsonFileId() {
         return resource.getId();
@@ -79,6 +87,7 @@ public class AccessPolicy implements Serializable {
         private File resource;
         private String tenantId;
         private AccessPolicyAction action;
+        private AccessPolicyStatus status;
 
         private Builder() {
             super();
@@ -99,11 +108,17 @@ public class AccessPolicy implements Serializable {
             return this;
         }
 
+        public Builder status(AccessPolicyStatus status) {
+            this.status = status;
+            return this;
+        }
+
         public AccessPolicy build() {
             var policy = new AccessPolicy();
             policy.setResource(resource);
             policy.setTenantId(tenantId);
             policy.setAction(action);
+            policy.setStatus(status);
             return policy;
         }
     }
