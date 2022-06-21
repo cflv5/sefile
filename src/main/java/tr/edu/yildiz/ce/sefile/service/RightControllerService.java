@@ -15,6 +15,7 @@ import tr.edu.yildiz.ce.se.base.exception.SeBaseException;
 import tr.edu.yildiz.ce.sefile.domain.entity.AccessPolicy;
 import tr.edu.yildiz.ce.sefile.domain.entity.AccessPolicyAction;
 import tr.edu.yildiz.ce.sefile.domain.request.InsertFileRightControllerRequest;
+import tr.edu.yildiz.ce.sefile.domain.request.UpdateFileRightControllerRequest;
 import tr.edu.yildiz.ce.sefile.domain.response.FetchPoliciesControllerResponse;
 import tr.edu.yildiz.ce.sefile.domain.response.FetchTenantsPolicyOnFileControllerResponse;
 import tr.edu.yildiz.ce.sefile.service.external.UserExternalService;
@@ -41,9 +42,9 @@ public class RightControllerService {
 
     public OnlyHeaderControllerResponse addRight(InsertFileRightControllerRequest request, String fileId) {
         var tenantId = TenantContext.getCurrentTenant().getTenantId();
-    
+
         var tenant = userExternalService.fetchTenantUser(request.getEmail());
-        
+
         if (tenantId.equals(tenant.getTenantId())) {
             throw new SeBaseException("Tenant is the owner of the file!", HttpStatus.OK);
         }
@@ -97,6 +98,19 @@ public class RightControllerService {
             }
         }
         return new FetchTenantsPolicyOnFileControllerResponse(ResponseHeader.success(), action);
+    }
+
+    public OnlyHeaderControllerResponse updateRight(UpdateFileRightControllerRequest request, int policyId) {
+        var policy = accessPolicyRepositoryService.findByIdToEdit(policyId);
+
+        if (policy.getAction() == request.getAction()) {
+            return OnlyHeaderControllerResponse.success("Policy action is the same");
+        }
+
+        policy.setAction(request.getAction());
+        accessPolicyRepositoryService.savePolicy(policy);
+
+        return OnlyHeaderControllerResponse.success("Policy successfuly updated");
     }
 
 }

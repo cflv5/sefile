@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tr.edu.yildiz.ce.se.base.domain.OnlyHeaderControllerResponse;
 import tr.edu.yildiz.ce.sefile.domain.request.InsertFileRightControllerRequest;
+import tr.edu.yildiz.ce.sefile.domain.request.UpdateFileRightControllerRequest;
 import tr.edu.yildiz.ce.sefile.domain.response.FetchPoliciesControllerResponse;
 import tr.edu.yildiz.ce.sefile.domain.response.FetchTenantsPolicyOnFileControllerResponse;
 import tr.edu.yildiz.ce.sefile.service.RightControllerService;
@@ -42,6 +43,12 @@ public class RightController {
     public ResponseEntity<OnlyHeaderControllerResponse> addFileRight(@PathVariable(value = "id") String fileId,
             @RequestBody @Valid InsertFileRightControllerRequest request) {
         return ResponseEntity.ok().body(rightControllerService.addRight(request, fileId));
+    }
+
+    @PostMapping(value = "/{id}")
+    public ResponseEntity<OnlyHeaderControllerResponse> updateFileRight(@PathVariable(value = "id") int policyId,
+            @RequestBody @Valid UpdateFileRightControllerRequest request) {
+        return ResponseEntity.ok().body(rightControllerService.updateRight(request, policyId));
     }
 
     @PostMapping(value = "/delete/{rightId}/file/{fileId}")
