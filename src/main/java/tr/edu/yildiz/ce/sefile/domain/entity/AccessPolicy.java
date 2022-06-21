@@ -31,6 +31,9 @@ public class AccessPolicy implements Serializable {
     @Enumerated(EnumType.STRING)
     private AccessPolicyAction action;
 
+    @Enumerated(EnumType.STRING)
+    private AccessPolicyStatus status;
+
     public int getId() {
         return id;
     }
