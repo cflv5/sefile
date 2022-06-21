@@ -1,7 +1,10 @@
 package tr.edu.yildiz.ce.sefile.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
+import tr.edu.yildiz.ce.se.base.context.TenantContext;
 import tr.edu.yildiz.ce.sefile.domain.entity.AccessPolicy;
 import tr.edu.yildiz.ce.sefile.domain.entity.AccessPolicyAction;
 import tr.edu.yildiz.ce.sefile.domain.entity.File;
@@ -25,5 +28,10 @@ public class AccessPolicyRepositoryService {
 
     public AccessPolicy savePolicy(AccessPolicy accessPolicy) {
         return accessPolicyRespository.save(accessPolicy);
+    }
+
+    public Optional<AccessPolicy> findTenantsPolicyOnFile(String fileId) {
+        return accessPolicyRespository.findByResourceIdAndTenantId(fileId,
+                TenantContext.getCurrentTenant().getTenantId());
     }
 }
