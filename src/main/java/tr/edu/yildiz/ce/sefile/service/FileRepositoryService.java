@@ -1,5 +1,7 @@
 package tr.edu.yildiz.ce.sefile.service;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +42,17 @@ public class FileRepositoryService {
         var optFile = fileRepository.findById(id);
 
         return optFile.orElseThrow(() -> new SeBaseException("File Not Found", HttpStatus.NOT_FOUND));
+    }
+
+    public List<File> findTenantsFiles() {
+        var tenantId = TenantContext.getCurrentTenant().getTenantId();
+        return fileRepository.findByTenantIdOrderByCreatedAtDesc(tenantId);
+    }
+
+    public String findFileOwner(String fileId) {
+        var file = fileRepository.findById(fileId)
+                .orElseThrow(() -> new SeBaseException("File not found.", HttpStatus.OK));
+        return file.getTenantId();
     }
 
 }

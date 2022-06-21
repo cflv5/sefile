@@ -11,7 +11,7 @@ public class InsertFileRightControllerRequest implements Serializable {
     @NotNull(message = "Action must be set")
     private AccessPolicyAction action;
     @NotBlank
-    private String tenantId;
+    private String email;
 
     public InsertFileRightControllerRequest() {
         super();
@@ -25,12 +25,12 @@ public class InsertFileRightControllerRequest implements Serializable {
         this.action = action;
     }
 
-    public String getTenantId() {
-        return tenantId;
+    public String getEmail() {
+        return email;
     }
 
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
 }
