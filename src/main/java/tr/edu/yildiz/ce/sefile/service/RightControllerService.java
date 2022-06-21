@@ -14,6 +14,7 @@ import tr.edu.yildiz.ce.se.base.domain.ResponseHeader;
 import tr.edu.yildiz.ce.se.base.exception.SeBaseException;
 import tr.edu.yildiz.ce.sefile.domain.entity.AccessPolicy;
 import tr.edu.yildiz.ce.sefile.domain.entity.AccessPolicyAction;
+import tr.edu.yildiz.ce.sefile.domain.entity.AccessPolicyStatus;
 import tr.edu.yildiz.ce.sefile.domain.request.InsertFileRightControllerRequest;
 import tr.edu.yildiz.ce.sefile.domain.request.UpdateFileRightControllerRequest;
 import tr.edu.yildiz.ce.sefile.domain.response.FetchPoliciesControllerResponse;
@@ -72,9 +73,14 @@ public class RightControllerService {
 
     public OnlyHeaderControllerResponse deleteRight(int rightId, String fileId) {
         var file = fileRepositoryService.findFileWithIdToEdit(fileId);
+        var policy = accessPolicyRepositoryService.findByIdToEdit(rightId);
 
         if (file.getPolicies().removeIf(p -> rightId == p.getId())) {
+            policy.setStatus(AccessPolicyStatus.DELETED);
+
+            accessPolicyRepositoryService.savePolicy(policy);
             fileRepositoryService.saveFile(file);
+
             return OnlyHeaderControllerResponse.success();
         } else {
             return OnlyHeaderControllerResponse.failed(HeaderMessage.Builder
